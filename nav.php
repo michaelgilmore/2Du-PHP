@@ -4,6 +4,7 @@ function add_todo() {
 	document.getElementById("new_todo").focus();
 }
 function submit_help_todo() {
+	alert('hello2');
 }
 </script>
 
