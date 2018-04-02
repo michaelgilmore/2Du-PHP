@@ -13,6 +13,15 @@
   }
   fclose($fp);
   
+  $sql = "SELECT text FROM tudus WHERE user_id = '$user_id' AND completed_date is null AND id = (SELECT MIN(id) FROM tudus WHERE completed_date is null)";
+  $result = mysqli_query($db,$sql);
+  $row = $result->fetch_array();
+  $oldest = $row[0];
+
+  $sql = "SELECT text FROM tudus WHERE user_id = '$user_id' AND completed_date is null AND id = (SELECT MIN(id) FROM tudus WHERE completed_date is null)";
+  $result = mysqli_query($db,$sql);
+  $row = $result->fetch_array();
+  $most_moved = $row[0];
 ?>
 
 <html>
@@ -134,6 +143,13 @@ d3.csv("bar-data<?php echo $user_id; ?>.csv", function(error, data) {
 			
 			</div>
 
+		</div>
+		
+		<div>
+
+			<div>Oldest: <?php echo $oldest; ?></div>
+			<div>Most Moved: <?php echo $most_moved; ?></div>
+		
 		</div>
 
 		<!-- Popper JS -->

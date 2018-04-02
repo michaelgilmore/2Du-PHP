@@ -3,9 +3,6 @@ function add_todo() {
 	document.getElementById("new_todo_row").style.display = "";
 	document.getElementById("new_todo").focus();
 }
-function submit_help_todo() {
-	alert('hello2');
-}
 </script>
 
 
@@ -28,11 +25,6 @@ function submit_help_todo() {
   <div class="col">
 	<a href="stats.php">
 	  <i class="fa fa-bar-chart" style="font-size:10vw;color:blue;"></i>
-	</a>
-  </div>
-  <div class="col">
-	<a href="javascript:submit_help_todo()">
-	  <i class="fa fa-question" style="font-size:10vw;color:orange;"></i>
 	</a>
   </div>
   <div class="col">
