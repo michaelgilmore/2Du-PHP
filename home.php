@@ -79,7 +79,9 @@ function countRows(initial_count) {
     </thead>
     <tbody>
 		<tr id="new_todo_row" class="new_todo_row" style="display: none">
-			<td><input name="new_todo" id="new_todo" style="width: 100%"></input></td>
+			<td>
+				<input name="new_todo" id="new_todo" style="width: 100%"></input>
+			</td>
 			<td>
 				<input name="new_todo_due_date" type="text" id="datepicker" style="width: 100px" value="<?php echo date('m/d/Y'); ?>">
 				<a href="javascript:add_new_todo()"><i class="fa fa-plus-circle" style="padding-left: 20px;font-size:20px;color:red;"></i></a>
@@ -87,7 +89,7 @@ function countRows(initial_count) {
 		</tr>
 		<tr id="new_todo_row_actions" class="new_todo_row" style="display: none">
 			<td colspan="2">
-			<input type="button" value="Save"/><input type="button" value="Edit Details"/><input type="button" value="Send to Help"/><input type="button" value="Send to Other User"/>
+			<input type="button" value="Save" onclick="javascript:add_new_todo()"/><input type="button" value="Edit Details"/><input type="button" value="Send to Help"/><input type="button" value="Send to Other User"/>
 			</td>
 		</td>
 
@@ -351,8 +353,6 @@ function add_new_todo() {
 	var new_todo = document.getElementById('new_todo');
 	var new_todo_due_date = document.getElementsByName('new_todo_due_date')[0];
 	
-	document.getElementsByClassName("new_todo_row").style.display = "";
-
 	if(new_todo.value) {
 		var http = new XMLHttpRequest();
 		var params = "txt=" + new_todo.value + "&due=" + new_todo_due_date.value;

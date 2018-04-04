@@ -1,6 +1,7 @@
 <script>
 function add_todo() {
 	document.getElementById("new_todo_row").style.display = "";
+	document.getElementById("new_todo_row_actions").style.display = "";
 	document.getElementById("new_todo").focus();
 }
 </script>

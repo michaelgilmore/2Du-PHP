@@ -40,18 +40,15 @@ function checkDateFormat($raw_date) {
 	return date('Y-m-d H:i:s', strtotime($raw_date));
 }
 
-
 $txt = getPostOrGet('txt');
 $cat = getPostOrGet('cat');
 $lbl = getPostOrGet('lbl');
-$typ = getPostOrGet('typ');
 $due = getPostOrGet('due');
 $don = getPostOrGet('don');
 
 $tuduText = mysqli_real_escape_string($db, $txt);
 $tuduCategory = mysqli_real_escape_string($db, $cat);
 $tuduLabel = mysqli_real_escape_string($db, $lbl);
-$tuduType = mysqli_real_escape_string($db, $typ);
 $tuduDue = mysqli_real_escape_string($db, $due);
 $tuduDone = mysqli_real_escape_string($db, $don);
 
@@ -94,19 +91,17 @@ switch ($method) {
 	$tuduText = mysqli_real_escape_string($db, $post_vars['txt']);
 	$tuduCategory = mysqli_real_escape_string($db, $post_vars['cat']);
 	$tuduLabel = mysqli_real_escape_string($db, $post_vars['lbl']);
-	$tuduType = mysqli_real_escape_string($db, $post_vars['typ']);
 	$tuduDue = mysqli_real_escape_string($db, $post_vars['due']);
 	//echo "php input due:$tuduDue\n";
 	//foreach ($post_vars as $key => $value)
 	//	echo "request:$key => $value\n";
-	if(!$key or (!$tuduText and !$tuduCategory and !$tuduType and !$tuduLabel and !$tuduDue)) {
+	if(!$key or (!$tuduText and !$tuduCategory and !$tuduLabel and !$tuduDue)) {
 		print 'bad put';
 		break;
     }
 	$sql = "update `$table` set ";
 	if($tuduText) $sql .= "text = '$tuduText'  ";
 	if($tuduCategory) $sql .= "category = '$tuduCategory'  ";
-	if($tuduType) $sql .= "type = '$tuduType'  ";
 	if($tuduLabel) $sql .= "label = '$tuduLabel'  ";
 	if($tuduDue) $sql .= "due_date = '$tuduDue'";
 	$sql = preg_replace('/  /i',',',trim($sql));
@@ -118,8 +113,8 @@ switch ($method) {
     if(!$key) {
 		$tuduDueOrNull = "'$tuduDue'" ?: 'NULL';
 		//insert
-		$sql = "insert into tudus (text,status,category,due_date,type,label,user_id) ".
-		   "values ( '$tuduText', 'A', '$tuduCategory', $tuduDueOrNull, '$tuduType', '$tuduLabel', $user_id)";
+		$sql = "insert into tudus (text,category,due_date,label,user_id) ".
+		   "values ( '$tuduText', '$tuduCategory', $tuduDueOrNull, '$tuduLabel', $user_id)";
 		   
 		db_log("Added '$tuduText'", 'info', $_SERVER['PHP_SELF']);
 	}
@@ -128,7 +123,6 @@ switch ($method) {
 		$sql = "update `$table` set";
 		if($tuduText) $sql .= " text = '$tuduText' ";
 		if($tuduCategory) $sql .= " category = '$tuduCategory' ";
-		if($tuduType) $sql .= " type = '$tuduType' ";
 		if($tuduLabel) $sql .= " label = '$tuduLabel' ";
 		if($tuduDue) $sql .= " due_date = '$tuduDue' ";
 		if($tuduDone) $sql .= " completed_date = '$tuduDone' ";
@@ -142,7 +136,8 @@ switch ($method) {
 //echo "$sql\n";
 $result = mysqli_query($db, $sql);
 if (!$result) {
-	server_log("SQL query failed ($result) returning 404");
+	server_log("SQL query ($sql) failed ($result) returning 404");
+	server_log(mysqli_error($db));
 	http_response_code(404);
 	die(mysqli_error($db));
 }
