@@ -3059,3 +3059,210 @@ Unknown column 'status' in 'field list'
 POST:insert into tudus (text,category,due_date,type,label,user_id) values ( 'todo: ftp only changed files', '', '2018-04-04 00:00:00', '', '', 1)
 SQL query (insert into tudus (text,category,due_date,type,label,user_id) values ( 'todo: ftp only changed files', '', '2018-04-04 00:00:00', '', '', 1)) failed () returning 404
 Unknown column 'type' in 'field list'
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'todo: only ftp changed files', '', '2018-04-04 00:00:00', '', 1)
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'todo: 5', '', '2018-04-04 00:00:00', '', 1)
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'Work review: areas of ownership vs significant contribution; primary vs secondary people on each service', '', '2018-04-04 00:00:00', '', 1)
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'trail mix for work', '', '2018-04-04 00:00:00', '', 1)
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'kids: write a program to solve a rubics cube', '', '2018-04-05 00:00:00', '', 1)
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=630 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=627 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=625 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=624 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=619 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-14 00:00:00'where id=583 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-14 00:00:00'where id=581 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=566 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=553 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=553 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=552 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=549 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=518 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=515 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=237 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=238 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=239 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=240 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=286 and user_id = 1
+POST:update `tudus` set due_date = '2018-03-30 00:00:00'where id=325 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=325 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=333 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=335 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=338 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=340 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=345 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=350 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=353 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=360 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-09 00:00:00'where id=387 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-09 00:00:00'where id=391 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=398 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=407 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=412 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=418 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=422 and user_id = 1
+POST:update `tudus` set completed_date = '2018-04-04 00:00:00'where id=423 and user_id = 1
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'todo: use case: when did i last get a hair cut', '', '2018-04-05 00:00:00', '', 1)
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=435 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=438 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=444 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-09 00:00:00'where id=447 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-09 00:00:00'where id=448 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=205 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=530 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=421 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=424 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-15 00:00:00'where id=428 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-15 00:00:00'where id=132 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-14 00:00:00'where id=623 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-29 00:00:00'where id=291 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=304 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-22 00:00:00'where id=320 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-14 00:00:00'where id=337 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=357 and user_id = 1
+POST:update `tudus` set due_date = '2018-05-12 00:00:00'where id=367 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=377 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-15 00:00:00'where id=388 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-22 00:00:00'where id=401 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-28 00:00:00'where id=449 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=457 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-14 00:00:00'where id=211 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=193 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=609 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=591 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=529 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=233 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=245 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=264 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=278 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=283 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=297 and user_id = 1
+POST:update `tudus` set due_date = '2018-05-04 00:00:00'where id=319 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-09 00:00:00'where id=331 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=342 and user_id = 1
+POST:update `tudus` set due_date = '2018-06-02 00:00:00'where id=343 and user_id = 1
+POST:update `tudus` set due_date = '2018-05-12 00:00:00'where id=344 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=385 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-16 00:00:00'where id=406 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=413 and user_id = 1
+POST:update `tudus` set completed_date = '2018-02-03 00:00:00'where id=149 and user_id = 1
+POST:update `tudus` set due_date = '2018-05-05 00:00:00'where id=81 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-10 00:00:00'where id=590 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=586 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=561 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=520 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=242 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=261 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-14 00:00:00'where id=328 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=332 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=369 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-09 00:00:00'where id=374 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=467 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=153 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=142 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=626 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=618 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=598 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-11 00:00:00'where id=589 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=234 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-14 00:00:00'where id=265 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-11 00:00:00'where id=280 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-10 00:00:00'where id=300 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-10 00:00:00'where id=307 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=327 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=339 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-13 00:00:00'where id=439 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=634 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-05 00:00:00'where id=633 and user_id = 1
+GET:select * from `tudus` where user_id = 1 and id=632
+POST:update `tudus` set text = 'todo: implement delete'where id=632 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-28 00:00:00'where id=632 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=631 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=628 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=584 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=243 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-10 00:00:00'where id=244 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-12 00:00:00'where id=414 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-11 00:00:00'where id=450 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=595 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-13 00:00:00'where id=230 and user_id = 1
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'lunch: blaze', '', '2018-04-05 00:00:00', '', 1)
+POST:update `tudus` set completed_date = '2018-04-05 00:00:00'where id=637 and user_id = 1
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'read: gathering blue lois lowry\'s next book after the giver', '', '2018-04-05 00:00:00', '', 1)
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'Gcc home', '', '2018-04-05 00:00:00', '', 1)
+GET:select * from `tudus` where user_id = 1 and id=639
+POST:update `tudus` set text = 'Gcc home, resume'where id=639 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=153 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=215 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=153 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=639 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-09 00:00:00'where id=638 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=636 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=635 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=633 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=561 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=553 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=552 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=515 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=233 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=237 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=238 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=239 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=240 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=283 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=304 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=340 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=342 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=353 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=357 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=369 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=407 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-06 00:00:00'where id=417 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=630 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-10 00:00:00'where id=628 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=618 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-09 00:00:00'where id=577 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=567 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=554 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=549 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=529 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-13 00:00:00'where id=512 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-07 00:00:00'where id=518 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=234 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-08 00:00:00'where id=257 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-14 00:00:00'where id=348 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-15 00:00:00'where id=393 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-11 00:00:00'where id=437 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-12 00:00:00'where id=438 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-14 00:00:00'where id=444 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-11 00:00:00'where id=467 and user_id = 1
+POST:update `tudus` set due_date = '2018-04-21 00:00:00'where id=198 and user_id = 1
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'GTR: Here I go again', '', '2018-04-06 00:00:00', '', 1)
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'Todo: Add details field to edit UI', '', '2018-04-06 00:00:00', '', 1)
+POST:update `tudus` set due_date = '2018-04-09 00:00:00'where id=595 and user_id = 1
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'Todo: add total bar to stats graph', '', '2018-04-08 00:00:00', '', 1)
+GET:select * from `tudus` where user_id = 1 and id=641
+GET:select * from `tudus` where user_id = 1 and id=641
+POST:update `tudus` set completed_date = '2018-04-06 00:00:00'where id=641 and user_id = 1
+GET:select * from `tudus` where user_id = 1 and id=267
+POST:update `tudus` set text = 'WISH: apple tree'where id=267 and user_id = 1
+POST:update `tudus` set due_date = '2018-08-01 00:00:00'where id=267 and user_id = 1
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'DAILY: codewars.com Python', '', '2018-04-06 00:00:00', '', 1)
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'BLOG: The Giver', '', '2018-04-06 00:00:00', '', 1)
+GET:select * from `tudus` where user_id = 1 and id=644
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'Todo: category', '', '2018-04-06 00:00:00', '', 1)
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'SYMC: fix Purge queue, create shovel', '', '2018-04-06 00:00:00', '', 1)
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'GTR: jazz guitar https://www.youtube.com/watch?v=yIC2BjE2rDo', '', '2018-04-06 00:00:00', '', 1)
+POST:insert into tudus (text,category,due_date,label,user_id) values ( 'BLOG: Ready Player One', '', '2018-04-06 00:00:00', '', 1)
+GET:select * from `tudus` where user_id = 1
+GET:select * from `tudus` where user_id = 1
+GET:select * from `tudus` where user_id = 1
+GET:select * from `tudus` where user_id = 1
+GET:select * from `tudus` where user_id = 1
+GET:select * from `tudus` where user_id = 1
+GET:select * from `tudus` where user_id = 1
+GET:select * from `tudus` where user_id = 1
+GET:select * from `tudus` where user_id = 1
+GET:select * from `tudus` where user_id = 1
+GET:select * from `tudus` where user_id = 1
+GET:select * from `tudus` where user_id = 1
+POST:insert into tudus (text,category,due_date,label,details,user_id) values ( 'Re-nail the top row of rolled roofing on the new shed', '', '2018-04-08 00:00:00', '', '', 1)

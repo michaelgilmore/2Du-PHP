@@ -2,7 +2,7 @@
   include "session.php";
 
   $user_id = $_SESSION['login_user_id'];
-  $sql = "SELECT id, text, due_date FROM tudus WHERE user_id = '$user_id' and completed_date is null ORDER BY due_date, created_date desc LIMIT 0, 1000";
+  $sql = "SELECT id, text, due_date, category FROM tudus WHERE user_id = '$user_id' and completed_date is null ORDER BY due_date, created_date desc LIMIT 0, 1000";
   $result = mysqli_query($db,$sql);
   
   $num_todos = mysqli_num_rows($result);
@@ -74,12 +74,14 @@ function countRows(initial_count) {
 				future<input onclick="viewFuture(this)" type="checkbox"/>
 			</div>
 		</th>
-        <th onclick="attributeOverlayOn()">due</th>
+        <!--th>cat</th-->
+        <th>due</th>
       </tr>
     </thead>
     <tbody>
+		<!-- New todo text box row -->
 		<tr id="new_todo_row" class="new_todo_row" style="display: none">
-			<td>
+			<td colspan="2">
 				<input name="new_todo" id="new_todo" style="width: 100%"></input>
 			</td>
 			<td>
@@ -87,12 +89,15 @@ function countRows(initial_count) {
 				<a href="javascript:add_new_todo()"><i class="fa fa-plus-circle" style="padding-left: 20px;font-size:20px;color:red;"></i></a>
 			</td>
 		</tr>
+		
+		<!-- New todo button bar row -->
 		<tr id="new_todo_row_actions" class="new_todo_row" style="display: none">
-			<td colspan="2">
+			<td colspan="3">
 			<input type="button" value="Save" onclick="javascript:add_new_todo()"/><input type="button" value="Edit Details"/><input type="button" value="Send to Help"/><input type="button" value="Send to Other User"/>
 			</td>
 		</td>
 
+		<!-- Todos rows -->
 <?php
 function dateToString($due_date) {
 	if(!$due_date) return '';
@@ -126,11 +131,12 @@ $todo_num = 0;
 while($row = mysqli_fetch_array($result,MYSQLI_ASSOC)) {
 	$todo_num++;
 	echo "<tr class=\"".getRowClassFromDueDate($row['due_date'])."\">";
-	echo "<td class=\"todo_text_td\" onclick=\"todoTouch(this);\">".$row['text']."</td>";
+	echo "<td id=\"".$row['id']."\" class='todo_text_td' onclick='javascript:todoTouch(this);'>".$row['text']."</td>";
 	//<i class=\"fa fa-tags\" aria-hidden=\"true\"></i>
-	echo "<td id=\"".$row['id']."\">"
+	//echo "<td>".$row['category']."</td>";
+	echo "<td>"
 		."<input type='text' id='datepicker".$todo_num."' value='".dateToString($row['due_date'])."' readonly"
-		." class='todo_list_due_date' onchange='javascript:updateDueDate(this)'/>"
+		." class='todo_list_due_date' onchange='javascript:todoDueDateTouch(this, ".$row['id'].")'/>"
 		."</td>";
 	echo "</tr>";
 }
@@ -147,13 +153,6 @@ if($num_todos_for_today <= 0) {
   </div>
 </div>
 
-<div id="overlay" onclick="off()">
-  <select id="attribute_select">
-    <option onclick="alert('cat');">Category</option>
-    <option onclick="alert('due');">Due date</option>
-  </select>
-</div>
-
 <div id="todo-list-action-dialog" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content" style="width: 350px">
@@ -165,6 +164,7 @@ if($num_todos_for_today <= 0) {
 					</div>
 				</div>
 				<a href="#" onclick="markTodoCompleted();"><i class="fa fa-check" style="padding: 5 25 5 5; font-size: 70px; color: green;"></i></a>
+				<a href="#" onclick="markTodoCompletedAndCreateAnother();"><i class="fa fa-check" style="padding: 5 25 5 5; font-size: 70px; color: orange;"></i></a>
 				<a id="edit-anchor" href="#" onclick="showEditTodoDialog();"><i class="fa fa-pencil" style="padding: 5 5 5 25; font-size: 60px; color: blue;"></i></a>
 				<a href="#" onclick="deleteTodo();"><i class="fa fa-times" style="padding: 5 5 5 25; font-size: 60px; color: red;"></i></a>
 				<input type="hidden" id="touched-todo-id" value=""/>
@@ -185,7 +185,7 @@ if($num_todos_for_today <= 0) {
 						<tr><td colspan="2"><b><input name="text" id="edit-todo-text" style="width: 40vw" value="text" onchange="updateText(this);"/></b></td></tr>
 						<tr><td><b>created_date</b></td><td><div id="edit-created-date"></div></td></tr>
 						<tr><td><b>updated_date</b></td><td><div id="edit-updated-date"></div></td></tr>
-						<tr><td><b>category</b></td><td><input name="category" id="edit-category" value="category"/></td></tr>
+						<tr><td><b>category</b></td><td><input name="category" id="edit-category" value="category" onchange="updateCategory(this);"/></td></tr>
 						
 						<tr><td><b>due_date</b></td>
 							<td><input name="due_date" type="text" id="edit-due-datepicker" style="width: 100px" value=""/>
@@ -198,7 +198,7 @@ if($num_todos_for_today <= 0) {
 							<input name="completed_date" type="text" id="edit-completed-datepicker" style="width: 100px" value=""/>
 							</td></tr>
 
-						<tr><td><b>details</b></td><td><input name="details" id="edit-details" value=""/></td></tr>
+						<tr><td><b>details</b></td><td><input name="details" id="edit-details" value="" onchange="updateDetails(this);"/></td></tr>
 							
 					</table>
 					
@@ -220,9 +220,14 @@ function closeEditDialog() {
 
 function todoTouch(todo_text_td) {
 	$('#completed-todo-text').text(todo_text_td.innerHTML);
-	$('#touched-todo-id').val(todo_text_td.nextSibling.id);
+	$('#touched-todo-id').val(todo_text_td.id);
 	$('#edit-anchor').attr('href', $('#edit-anchor').attr('href') + '?id=' + todo_text_td.nextSibling.id);
 	$('#todo-list-action-dialog').modal({keyboard: true});
+}
+
+function todoDueDateTouch(input_element, todo_id) {
+	$('#touched-todo-id').val(todo_id);
+	updateDueDate(input_element);
 }
 
 function showEditTodoDialog() {
@@ -289,33 +294,48 @@ $(function() {
 
 function markTodoCompleted() {
 	
-	var todo_id = document.getElementById('touched-todo-id').value;
-	var completed_date = document.getElementById('completed-datepicker').value;
+	var completed_date_input = document.getElementById('completed-datepicker');
 
-	updateTodoField(todo_id, "don", completed_date);
+	updateTodoField("don", completed_date_input, false);
 
 	$('#todo-list-action-dialog').modal({keyboard: true});
 	location.reload();
 }
 
-function updateText(text_input_element) {
+function copyTodoForRecurring() {
 	
-	var value = text_input_element.value;
+	//...
+	
+}
+
+function markTodoCompletedAndCreateAnother() {
+	
+	copyTodoForRecurring();
+	markTodoCompleted();
+}
+
+function updateText(input_element) {
+	updateTodoField("txt", input_element, false);
+}
+
+function updateDueDate(input_element) {
+	updateTodoField("due", input_element, false);
+}
+
+function updateCategory(input_element) {
+	updateTodoField("cat", input_element, false);
+}
+
+function updateDetails(input_element) {
+	updateTodoField("det", input_element, false);
+}
+
+function updateTodoField(field, input_element, should_reload_page) {
+	
+	var value = input_element.value;
 	var todo_id = $('#touched-todo-id').val();
-	
-	updateTodoField(todo_id, "txt", value);
-}
 
-function updateDueDate(due_date_input_element) {
-	
-	var td = due_date_input_element.parentNode;
-	var todo_id = td.getAttribute("id");
-	$('#touched-todo-id').val(todo_id);
-	
-	updateTodoField(todo_id, "due", due_date_input_element.value);
-}
-
-function updateTodoField(todo_id, field, value) {
+	//alert(todo_id + "," + field + "," + value);
 	
 	if(!todo_id || !field) {
 		return;
@@ -332,21 +352,15 @@ function updateTodoField(todo_id, field, value) {
 		if(xhr.readyState == 4 && xhr.status == 200) {
 			//success
 			//alert('success ' + xhr.responseText);
-			//location.reload();
+			if(should_reload_page) {
+				location.reload();
+			}
 		}
 		else {
 			//alert(xhr.responseText);
 		}
 	}
 	xhr.send(params);
-}
-
-function attributeOverlayOn() {
-    document.getElementById("overlay").style.display = "block";
-}
-
-function attributeOverlayOff() {
-    document.getElementById("overlay").style.display = "none";
 }
 
 function add_new_todo() {

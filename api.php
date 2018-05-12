@@ -11,7 +11,7 @@ if(!isset($_SESSION['login_user_id'])){
 $server_log = fopen('server.log', 'a');
 function server_log($str) {
 	global $server_log;
-	fwrite($server_log, "$str\n");
+	fwrite($server_log, date("Y-m-d H:i:s ")."$str\n");
 }
 
 $user_id = $_SESSION['login_user_id'];
@@ -45,15 +45,19 @@ $cat = getPostOrGet('cat');
 $lbl = getPostOrGet('lbl');
 $due = getPostOrGet('due');
 $don = getPostOrGet('don');
+$det = getPostOrGet('det');
 
 $tuduText = mysqli_real_escape_string($db, $txt);
 $tuduCategory = mysqli_real_escape_string($db, $cat);
 $tuduLabel = mysqli_real_escape_string($db, $lbl);
 $tuduDue = mysqli_real_escape_string($db, $due);
 $tuduDone = mysqli_real_escape_string($db, $don);
+$tuduDetails = mysqli_real_escape_string($db, $det);
 
 $tuduDue = checkDateFormat($tuduDue);
 $tuduDone = checkDateFormat($tuduDone);
+
+server_log("txt:$tuduText,cat:$tuduCategory,lbl:$tuduLabel,due:$tuduDue,don:$tuduDone,det:$tuduDetails");
 
 // connect to the mysql database
 mysqli_set_charset($db,'utf8');
@@ -61,13 +65,13 @@ mysqli_set_charset($db,'utf8');
 // retrieve the table and key from the path
 $table = preg_replace('/[^a-z0-9_]+/i','',array_shift($request));
 $key = array_shift($request)+0;
-//echo "key:$key\n";
+server_log("key:$key");
 
 // create SQL based on HTTP method
 switch ($method) {
   case 'GET':
     $sql = "select * from `$table` where user_id = $user_id".($key?" and id=$key":''); 
-	server_log("GET:$sql");
+	//server_log("GET:$sql");
 	break;
   case 'PUT':
     echo 'PUT not supported';
@@ -113,8 +117,8 @@ switch ($method) {
     if(!$key) {
 		$tuduDueOrNull = "'$tuduDue'" ?: 'NULL';
 		//insert
-		$sql = "insert into tudus (text,category,due_date,label,user_id) ".
-		   "values ( '$tuduText', '$tuduCategory', $tuduDueOrNull, '$tuduLabel', $user_id)";
+		$sql = "insert into tudus (text,category,due_date,label,details,user_id) ".
+		   "values ( '$tuduText', '$tuduCategory', $tuduDueOrNull, '$tuduLabel', '$tuduDetails', $user_id)";
 		   
 		db_log("Added '$tuduText'", 'info', $_SERVER['PHP_SELF']);
 	}
@@ -126,6 +130,7 @@ switch ($method) {
 		if($tuduLabel) $sql .= " label = '$tuduLabel' ";
 		if($tuduDue) $sql .= " due_date = '$tuduDue' ";
 		if($tuduDone) $sql .= " completed_date = '$tuduDone' ";
+		if($tuduDetails) $sql .= " details = '$tuduDetails' ";
 		$sql = preg_replace('/  /i',',',trim($sql));
 		$sql .= "where id=$key and user_id = $user_id"; 
 	}
@@ -138,6 +143,7 @@ $result = mysqli_query($db, $sql);
 if (!$result) {
 	server_log("SQL query ($sql) failed ($result) returning 404");
 	server_log(mysqli_error($db));
+	fclose($server_log);
 	http_response_code(404);
 	die(mysqli_error($db));
 }
