@@ -1,8 +1,10 @@
 <script>
-function add_todo() {
+function showNewTodoRow() {
 	document.getElementById("new_todo_row").style.display = "";
-	document.getElementById("new_todo_row_actions").style.display = "";
-	document.getElementById("new_todo").focus();
+	//document.getElementById("new_todo_row_actions").style.display = "";
+    //window.setTimeout(function () {
+        document.getElementById('new_todo').focus();
+    //}, 0);
 }
 </script>
 
@@ -29,7 +31,7 @@ function add_todo() {
 	</a>
   </div>
   <div class="col">
-	<a href="javascript:add_todo()">
+	<a href="javascript:showNewTodoRow()">
 	  <i class="fa fa-plus-circle" style="font-size:10vw;color:red;"></i>
 	</a>
   </div>

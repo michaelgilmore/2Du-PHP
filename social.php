@@ -1,3 +1,7 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+<meta charset="UTF-8">
+
 <?php
   include "session.php";
 
@@ -13,15 +17,23 @@
   $row = $result->fetch_row();
   $todo_count = $row[0];
 
+  $sql = "SELECT count(id) FROM tudus WHERE user_id = $user_id";
+  $result = mysqli_query($db,$sql);
+  $row = $result->fetch_row();
+  $todo_count_for_user = $row[0];
+
   $sql = "SELECT count(id) FROM tudus where completed_date is not null";
   $result = mysqli_query($db,$sql);
   $row = $result->fetch_row();
   $done_count = $row[0];
+
+  $sql = "SELECT count(id) FROM tudus where completed_date is not null AND user_id = $user_id";
+  $result = mysqli_query($db,$sql);
+  $row = $result->fetch_row();
+  $done_count_for_user = $row[0];
   
 ?>
 
-<html>
-   
 	<head>
 		<title>Social</title>
       
@@ -54,12 +66,12 @@
 					<?php echo $user_count; ?> Users
 					</div>
 					<div class="col-sm">
-					<?php echo $todo_count; ?> Todos
+					<?php echo $todo_count_for_user; ?>/<?php echo $todo_count; ?> Todos
 					</div>
 					<div class="col-sm">
 					</div>
 					<div class="col-sm" style="color: red">
-					<?php echo $done_count; ?> Done
+					<?php echo $done_count_for_user; ?>/<?php echo $done_count; ?> Done
 					</div>
 					<div class="col-sm">
 					</div>
@@ -68,7 +80,15 @@
 			</div>
 			
 			<div style="margin-top: 100px;">
-				<b>Connect to Friend</b> <form><input placeholder="username" /><input type="submit"/></form>
+				<b>Connect to Friend</b>
+                <input id="connect_to_username" placeholder="username"/>
+                <input value="Connect" type="button" onclick="connectFriends()"/>
+			</div>
+			<div style="margin-top: 100px;">
+				<b>Share list with Friend</b>
+                <select id="share_list_dropdown"></select>
+                <select id="share_with_user_dropdown"></select>
+                <input value="Share" type="button" onclick="shareList()"/>
 			</div>
 
 		</div>
@@ -79,5 +99,125 @@
 		<!-- Latest compiled JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 
+        <script>
+        $(function() {
+
+            populateListDropdownForSharing();
+            populateUserDropdownForSharing();
+        
+        });
+
+        function populateListDropdownForSharing() {
+            var xhr = new XMLHttpRequest();
+            var url = 'list/read.php';
+            xhr.open("GET", url, true);
+
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState == 4 && xhr.status == 200) {
+
+                    alert('xhr text:'+xhr.responseText);
+                    //alert('xhr type:'+xhr.responseType);
+                    //alert('xhr json:'+xhr.responseJSON);
+                    //alert('xhr xml:'+xhr.responseXML);
+
+                    var select = $('#share_list_dropdown');
+                    
+                    var arr = JSON.parse(xhr.responseText);
+
+                    for(var i = 0; i < arr.getLength(); i++) {
+                        select.append('<option value=>' + arr[i] + '</option>');
+                    }
+                }
+                else {
+                    //we come here for state 2 and 3 before we get 4
+                    //alert('state:' + xhr.readyState + ', status:' + xhr.status);
+                }
+            }
+            xhr.send();
+        }
+
+        function populateUserDropdownForSharing() {
+            var xhr = new XMLHttpRequest();
+            var url = 'friend/read.php';
+            xhr.open("GET", url, true);
+
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState == 4 && xhr.status == 200) {
+
+                    //alert('xhr text:'+xhr.responseText);
+                    //alert('xhr type:'+xhr.responseType);
+                    //alert('xhr json:'+xhr.responseJSON);
+                    //alert('xhr xml:'+xhr.responseXML);
+
+                    var select = $('#share_with_user_dropdown');
+                    
+                    var arr = JSON.parse(xhr.responseText);
+
+                    $.each(arr, function(key, value) {
+                        select.append('<option value=' + key + '>' + value + '</option>');
+                    });
+                }
+                else {
+                    //we come here for state 2 and 3 before we get 4
+                    //alert('state:' + xhr.readyState + ', status:' + xhr.status);
+                }
+            }
+            xhr.send();
+        }
+        
+        function connectFriends() {
+            var friend_username = $('#connect_to_username').val();
+            
+            var xhr = new XMLHttpRequest();
+            var params = 'friend_username=' + friend_username;
+            var url = 'friend/create.php';
+            //alert(url);
+            xhr.open("POST", url, true);
+
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState == 4 && xhr.status == 200) {
+
+                    //alert('xhr text:'+xhr.responseText);
+                    //alert('xhr type:'+xhr.responseType);
+                    //alert('xhr json:'+xhr.responseJSON);
+                    //alert('xhr xml:'+xhr.responseXML);
+                    alert('You are now connected to ' + friend_username);
+                }
+                else {
+                    //we come here for state 2 and 3 before we get 4
+                    //alert('state:' + xhr.readyState + ', status:' + xhr.status);
+                }
+            }
+            xhr.send(params);
+        }
+        
+        function shareList() {
+            var share_list_id = $('#share_list_dropdown').val();
+            var share_with_user_id = $('#share_with_user_dropdown').val();
+            
+            var xhr = new XMLHttpRequest();
+            var params = "list_id=" + share_list_id + "&user_id=" + share_with_user_id;
+            var url = 'list/update.php';
+            //alert(url);
+            xhr.open("POST", url, true);
+
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState == 4 && xhr.status == 200) {
+
+                    //alert('xhr text:'+xhr.responseText);
+                    //alert('xhr type:'+xhr.responseType);
+                    //alert('xhr json:'+xhr.responseJSON);
+                    //alert('xhr xml:'+xhr.responseXML);
+                    //alert('You have shared ' + share_list + ' with ' + share_with_user);
+                    alert('Your list has been shared');
+                }
+                else {
+                    //we come here for state 2 and 3 before we get 4
+                    //alert('state:' + xhr.readyState + ', status:' + xhr.status);
+                }
+            }
+            xhr.send(params);
+        }
+        </script>
 	</body>
 </html>

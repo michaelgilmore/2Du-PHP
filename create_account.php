@@ -63,33 +63,76 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check input errors before inserting in database
     if(empty($username_err) && empty($password_err) && empty($confirm_password_err)){
         
-        // Prepare an insert statement
-        $sql = "INSERT INTO tudu_users (name, p) VALUES (?, sha1(?))";
-         
-        if($stmt = mysqli_prepare($db, $sql)){
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_password);
-            
-            // Set parameters
-            $param_username = $username;
-            //$param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
-            $param_password = $password; // Creates a password hash
-            
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                // Redirect to login page
-                header("location: index.php");
-            } else{
-                echo "Something went wrong. Please try again later.";
-            }
+        if(addNewUserToDB($db, $param_username, $param_password)){
+            // Redirect to login page
+            header("location: index.php");
+        } else{
+            echo "Oh no! Something went wrong. Sorry about that. Please try again later or send a message to help@gilmore.cc.";
         }
-         
-        // Close statement
-        mysqli_stmt_close($stmt);
     }
     
     // Close connection
     mysqli_close($db);
+}
+
+function addNewUserToDB($db, $username, $password) {
+    
+    $added_user = addUserRecord($db, $username, $password);
+    $added_users_personal_list = addInitialListRecord($db, $username);
+    
+    return $added_user && $added_users_personal_list;
+}
+
+function addUserRecord($db, $username, $password) {
+    
+    // Prepare an insert statement
+    $sql = "INSERT INTO tudu_users (name, p) VALUES (?, sha1(?))";
+     
+    if($stmt = mysqli_prepare($db, $sql)){
+        // Bind variables to the prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, "ss", $username, $password);
+        
+        // Attempt to execute the prepared statement
+        $added_user = mysqli_stmt_execute($stmt);
+        
+        if(!$added_user) {
+            echo "Error code: 101";
+        }
+    }
+     
+    // Close statement
+    mysqli_stmt_close($stmt);
+    
+    return $added_user;
+}
+
+function addInitialListRecord($db, $username) {
+    
+    // Add default 'personal' list for new user
+    $sql = "INSERT INTO tudu_lists (title) VALUES ('personal'))";
+    $added_personal_list_record = $db->query($sql);
+    if(!$added_personal_list_record) {
+        echo "Error code: 102";
+        return false;
+    }
+    $list_id = mysqli_insert_id($db);
+    
+    // Set list access level for user's new personal list
+    $set_list_access = false;
+    $sql = "INSERT INTO tudu_list_access (user_id, list_id, access_level) VALUES (?, ?, ?)";
+    if($stmt = mysqli_prepare($db, $sql)){
+        // Bind variables to the prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, "dds", $user_id, $list_id, 'read_write');
+        // Attempt to execute the prepared statement
+        $set_list_access = mysqli_stmt_execute($stmt);
+        
+        if(!$set_list_access) {
+            echo "Error code: 103";
+        }
+    }
+    mysqli_stmt_close($stmt);
+    
+    return $set_list_access;
 }
 ?>
  

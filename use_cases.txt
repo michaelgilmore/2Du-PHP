@@ -1,0 +1,5 @@
+Use Case Tests
+
+1. Create new user. See that 'personal' list is created and can be added to.
+
+2. Create new list and share access with a second user (read_only). a) See that second user cannot add to list or grant list access to another user. b) See that a third user, who does not have access to the list, cannot see it.

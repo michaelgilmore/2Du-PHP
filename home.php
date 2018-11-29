@@ -1,58 +1,26 @@
+<!-- TODO: Remove all reload calls -->
+<html>
+<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+<meta charset="UTF-8">
+
 <?php
   include "session.php";
+  include "db_queries.php";
 
   $user_id = $_SESSION['login_user_id'];
-  $sql = "SELECT id, text, due_date, category FROM tudus WHERE user_id = '$user_id' and completed_date is null ORDER BY due_date, created_date desc LIMIT 0, 1000";
-  $result = mysqli_query($db,$sql);
+
+  if(isset($_GET['selected_list_id'])) {
+      $_SESSION['selected_list_id'] = $_GET['selected_list_id'];
+  }
   
-  $num_todos = mysqli_num_rows($result);
+  $sql = sql_select_lists_for_user($user_id);
+  $accessible_lists_result = mysqli_query($db,$sql);
 ?>
 
 <!--
 <h1>Welcome <?php echo $_SESSION['login_user']; ?></h1>
-<h2>You have <?php echo $num_todos; ?> active todos</h2>	  
 <h3><a href = "logout.php">Sign Out</a></h2>
 -->
-
-<script>
-function viewPast(cb) {
-	var past_count = 0;
-	if(cb.checked) {
-		$(".past-due").addClass("show");
-		$('.past-due').each(function(i, obj) {
-			past_count++;
-		});
-	}
-	else {
-		$(".past-due").removeClass("show");
-	}
-	
-	countRows(past_count);
-}
-function viewFuture(cb) {
-	var future_count = 0;
-	if(cb.checked) {
-		$(".future-due").addClass("show");
-		$('.future-due').each(function(i, obj) {
-			future_count++;
-		});
-	}
-	else {
-		$(".future-due").removeClass("show");
-	}
-	
-	countRows(future_count);
-}
-
-function countRows(initial_count) {
-	var rowCount = initial_count;
-	var table = document.getElementById("todo_main_table");
-	$('.due-today').each(function(i, obj) {
-		rowCount++;
-	});
-	$('#num-todos').text('(' + rowCount + '/<?php echo $num_todos; ?>)');
-}
-</script>
 
 <div class="container">
 
@@ -69,12 +37,32 @@ function countRows(initial_count) {
 			todo<div id="num-todos" style="color: #bbbbbb; display: inline"></div>
 			</div>
 			<div id="view-options" style="margin-left: 20px; color: #aaaaaa; display: inline">
-				past<input onclick="viewPast(this)" type="checkbox"/>
+				past<input id="view_past_check_box" onclick="viewPast(this)" type="checkbox"/>
 				&nbsp;
-				future<input onclick="viewFuture(this)" type="checkbox"/>
+				future<input id="view_future_check_box" onclick="viewFuture(this)" type="checkbox"/>
 			</div>
 		</th>
-        <!--th>cat</th-->
+        <th>
+            <div id="lists_dropdown">
+                <select id="select_list" onchange="javascript:selectList()">
+                    <?
+                      while($accessible_list_row = mysqli_fetch_array($accessible_lists_result, MYSQLI_ASSOC)) {
+                        echo "<option value=\"".$accessible_list_row['id']."\"";
+                        if($_SESSION['selected_list_id'] == 0) {
+                            if('personal' == $accessible_list_row['title']) {
+                                echo " selected";
+                            }
+                        }
+                        elseif($accessible_list_row['id'] == $_SESSION['selected_list_id']) {
+                            echo " selected";
+                        }
+                        echo ">".$accessible_list_row['title']."</option>";  
+                      }
+                    ?>
+                    <option value="">+Add New List+</option>
+                </select>
+            </div>
+        </th>
         <th>due</th>
       </tr>
     </thead>
@@ -86,70 +74,23 @@ function countRows(initial_count) {
 			</td>
 			<td>
 				<input name="new_todo_due_date" type="text" id="datepicker" style="width: 100px" value="<?php echo date('m/d/Y'); ?>">
-				<a href="javascript:add_new_todo()"><i class="fa fa-plus-circle" style="padding-left: 20px;font-size:20px;color:red;"></i></a>
+				<a href="javascript:addNewTodo()"><i class="fa fa-plus-circle" style="padding-left: 20px;font-size:20px;color:red;"></i></a>
 			</td>
 		</tr>
 		
 		<!-- New todo button bar row -->
+        <!--
 		<tr id="new_todo_row_actions" class="new_todo_row" style="display: none">
 			<td colspan="3">
-			<input type="button" value="Save" onclick="javascript:add_new_todo()"/><input type="button" value="Edit Details"/><input type="button" value="Send to Help"/><input type="button" value="Send to Other User"/>
+			<input type="button" value="Save" onclick="javascript:addNewTodo()"/><input type="button" value="Edit Details"/><input type="button" value="Send to Help"/><input type="button" value="Send to Other User"/>
 			</td>
 		</td>
+        -->
 
-		<!-- Todos rows -->
-<?php
-function dateToString($due_date) {
-	if(!$due_date) return '';
-	return date('m/d/Y', strtotime($due_date));
-}
-
-$num_todos_for_today = 0;
-
-function getRowClassFromDueDate($due_date) {
-	global $num_todos_for_today;
-	
-    $due_date_timestamp = strtotime($due_date);
-	
-	$today_timestamp = strtotime("today");
-    $tomorrow_timestamp = strtotime("today +1 day");
-
-    $row_class = "due-today";
-	
-	if($due_date_timestamp < $today_timestamp) {
-		$row_class = "past-due";
-	}
-	if($due_date_timestamp >= $tomorrow_timestamp) {
-		$row_class = "future-due";
-	}
-	
-	$num_todos_for_today++;
-	return $row_class;
-}
-
-$todo_num = 0;
-while($row = mysqli_fetch_array($result,MYSQLI_ASSOC)) {
-	$todo_num++;
-	echo "<tr class=\"".getRowClassFromDueDate($row['due_date'])."\">";
-	echo "<td id=\"".$row['id']."\" class='todo_text_td' onclick='javascript:todoTouch(this);'>".$row['text']."</td>";
-	//<i class=\"fa fa-tags\" aria-hidden=\"true\"></i>
-	//echo "<td>".$row['category']."</td>";
-	echo "<td>"
-		."<input type='text' id='datepicker".$todo_num."' value='".dateToString($row['due_date'])."' readonly"
-		." class='todo_list_due_date' onchange='javascript:todoDueDateTouch(this, ".$row['id'].")'/>"
-		."</td>";
-	echo "</tr>";
-}
-?>
+		<!-- Todo table is inserted here -->
 
     </tbody>
   </table>
-<?php
-if($num_todos_for_today <= 0) {
-	echo "<h1>You're done for today!</h1>";
-	echo "<h2>Reward yourself.</h2>";
-}
-?>
   </div>
 </div>
 
@@ -164,10 +105,22 @@ if($num_todos_for_today <= 0) {
 					</div>
 				</div>
 				<a href="#" onclick="markTodoCompleted();"><i class="fa fa-check" style="padding: 5 25 5 5; font-size: 70px; color: green;"></i></a>
-				<a href="#" onclick="markTodoCompletedAndCreateAnother();"><i class="fa fa-check" style="padding: 5 25 5 5; font-size: 70px; color: orange;"></i></a>
 				<a id="edit-anchor" href="#" onclick="showEditTodoDialog();"><i class="fa fa-pencil" style="padding: 5 5 5 25; font-size: 60px; color: blue;"></i></a>
 				<a href="#" onclick="deleteTodo();"><i class="fa fa-times" style="padding: 5 5 5 25; font-size: 60px; color: red;"></i></a>
 				<input type="hidden" id="touched-todo-id" value=""/>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="add-list-dialog" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content" style="width: 350px">
+			<div class="modal-body" style="background-color: #444444;">
+				<div id="completed-todo-text" style="color: white; font-size: 30px; padding-bottom: 30px;">Add New List</div>
+                <input name="new-list-title" id="new-list-title"/><br>
+                <input value="Create List" type="button" onclick="addNewList();"/>
+				<input type="hidden" id="user-id" value=""/>
 			</div>
 		</div>
 	</div>
@@ -208,7 +161,167 @@ if($num_todos_for_today <= 0) {
 	</div>
 </div>
 
+<script type="text/javascript" src="todo.js"></script>
 <script>
+var count_past = false;
+var count_future = false;
+
+function viewPast(cb) {
+	if(cb.checked) {
+		$(".past-due").addClass("show");
+        count_past = true;
+	}
+	else {
+		$(".past-due").removeClass("show");
+        count_past = false;
+	}
+	
+	countRows();
+}
+function viewFuture(cb) {
+	if(cb.checked) {
+		$(".future-due").addClass("show");
+        count_future = true;
+	}
+	else {
+		$(".future-due").removeClass("show");
+        count_future = false;
+	}
+	
+	countRows();
+}
+
+function countRows() {
+
+	var row_count = 0;
+    var total_not_complete = 0;
+	var table = document.getElementById("todo_main_table");
+    $('.past-due').each(function(i, obj) {
+        if(count_past) row_count++;
+		total_not_complete++;
+    });
+	$('.future-due').each(function(i, obj) {
+        if(count_future) row_count++;
+		total_not_complete++;
+	});
+	$('.due-today').each(function(i, obj) {
+		total_not_complete++;
+		row_count++;
+	});
+	$('#num-todos').text('(' + row_count + '/' + total_not_complete + ')');
+    return total_not_complete;
+}
+
+document.getElementById("new_todo").addEventListener("keyup", function(event) {
+  // Cancel the default action, if needed
+  event.preventDefault();
+  // 13 is the enter key
+  if (event.keyCode === 13) {
+      addNewTodo();
+  }
+});
+
+function addList() {
+	$('#add-list-dialog').modal({keyboard: true});
+}
+
+function selectList() {
+
+    if($('#select_list').val() == 0) {
+        addList();
+        return;
+    }
+    
+    $("#todo_main_table").find("tr:gt(1)").remove();
+	
+    var xhr = new XMLHttpRequest();
+    var params = "list_id=" + $('#select_list').val();
+    var url = 'read.php?' + params;
+    //alert(url);
+	xhr.open("GET", url, true);
+
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4 && xhr.status == 200) {
+
+   			//alert('xhr text:'+xhr.responseText);
+			//alert('xhr type:'+xhr.responseType);
+			//alert('xhr json:'+xhr.responseJSON);
+			//alert('xhr xml:'+xhr.responseXML);
+            
+            var arr = JSON.parse(xhr.responseText);
+            var out = "";
+            var i;
+            if(arr.length == 0) {
+                out += "<tr><td colspan=3>";
+                out += "<h1>You're done for today!</h1>";
+	            out += "<h2>Reward yourself.</h2>";
+                out += "</td></tr>";
+            }
+            else {
+                for(i = 0; i < arr.length; i++) {
+                    out += arr[i].id + '.' + arr[i].text + '\n';
+
+                    out += "<tr class=\"" + getRowClassFromDueDate(arr[i].due_date) + "\">";
+                    out += "<td id=\"" + arr[i].id + "\" colspan=2 class='todo_text_td' onclick='javascript:todoTouch(this);'>" + arr[i].text + "</td>";
+                    out += "<td>"
+                        + "<input type='text' id='datepicker" + i + "' value='" + formatDate(arr[i].due_date) + "' readonly"
+                        + " class='todo_list_due_date' onchange='javascript:todoDueDateTouch(this, " + arr[i].id + ")'/>"
+                        + "</td>";
+                    out += "</tr>";
+                }
+            }
+
+            $('#todo_main_table > tbody:last-child').append(out);
+            
+            $('#view_past_check_box')[0].checked = false;
+            count_past = false;
+            $('#view_future_check_box')[0].checked = false;
+            count_future = false;
+            
+            var numTodos = countRows();
+            for (var i = 0; i <= numTodos; i++) {
+                $("#datepicker" + i).datepicker({
+                    changeMonth: true,
+                    changeYear: true
+                });
+            }
+		}
+		else {
+            //we come here for state 2 and 3 before we get 4
+			//alert('state:' + xhr.readyState + ', status:' + xhr.status);
+		}
+	}
+	xhr.send();
+}
+
+function getRowClassFromDueDate(due_date_string) {
+
+    var due_date = Date.parse(due_date_string);
+
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    var tomorrow = new Date();
+    tomorrow.setDate(today.getDate()+1);
+
+    row_class = "due-today";
+	
+	if(due_date < today) {
+		row_class = "past-due";
+	}
+	if(due_date >= tomorrow) {
+		row_class = "future-due";
+	}
+
+	return row_class;
+}
+
+function formatDate(date_string) {
+	if(!date_string) return '';
+    var m = new Date(date_string);
+    var formatted_date = (m.getMonth()+1) + "/" + m.getDate() + "/" + m.getFullYear();
+    return formatted_date;
+}
+
 function deleteTodo() {
 	alert("Can't do that yet.");
 }
@@ -216,6 +329,34 @@ function deleteTodo() {
 function closeEditDialog() {
 	$('#edit-todo-dialog').modal('hide');
 	location.reload();
+}
+
+function addNewList() {
+	$('#add-new-list').modal('hide');
+
+	var new_list = document.getElementById('new-list-title');
+	
+	if(new_list.value) {
+		var http = new XMLHttpRequest();
+		var params = "title=" + new_list.value;
+		http.open("POST", "api.php/tudu_lists", true);
+
+		http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+		http.onreadystatechange = function() {
+			if(http.readyState == 4 && http.status == 200) {
+				//success
+				//alert(http.responseText);
+				//location.reload();
+                $('#select_list').val(new_list.value);
+			}
+		}
+		http.send(params);
+		//var response = JSON.parse(xhttp.responseText);
+	}
+	else {
+		alert("I didn't understand your entry. Please try again.");
+	}
 }
 
 function todoTouch(todo_text_td) {
@@ -239,8 +380,6 @@ function showEditTodoDialog() {
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", 'api.php/tudus/'+$('#touched-todo-id').val(), true);
 
-	//xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
 			//success
@@ -260,7 +399,7 @@ function showEditTodoDialog() {
 			//$('#edit-details').val(details);
 		}
 		else {
-			//alert(xhr.responseText);
+			//alert('state:' + xhr.readyState + ', status:' + xhr.status);
 		}
 	}
 	xhr.send();
@@ -283,13 +422,9 @@ $(function() {
 		changeMonth: true,
 		changeYear: true
 	});
-	
-	for ($i = 1; $i <= <?php echo $num_todos; ?>; $i++) {
-		$("#datepicker" + $i).datepicker({
-		changeMonth: true,
-		changeYear: true
-	});
-	}
+    
+    // Initial load of todo table
+    selectList();
 });
 
 function markTodoCompleted() {
@@ -300,18 +435,6 @@ function markTodoCompleted() {
 
 	$('#todo-list-action-dialog').modal({keyboard: true});
 	location.reload();
-}
-
-function copyTodoForRecurring() {
-	
-	//...
-	
-}
-
-function markTodoCompletedAndCreateAnother() {
-	
-	copyTodoForRecurring();
-	markTodoCompleted();
 }
 
 function updateText(input_element) {
@@ -363,14 +486,15 @@ function updateTodoField(field, input_element, should_reload_page) {
 	xhr.send(params);
 }
 
-function add_new_todo() {
+function addNewTodo() {
 	var new_todo = document.getElementById('new_todo');
 	var new_todo_due_date = document.getElementsByName('new_todo_due_date')[0];
 	
 	if(new_todo.value) {
 		var http = new XMLHttpRequest();
-		var params = "txt=" + new_todo.value + "&due=" + new_todo_due_date.value;
-		http.open("POST", "api.php/tudus", true);
+		var params = "txt=" + encodeURIComponent(new_todo.value) + "&due=" + new_todo_due_date.value;
+        //alert(params);
+		http.open("POST", "create.php", true);
 
 		http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
@@ -380,6 +504,9 @@ function add_new_todo() {
 				//alert(http.responseText);
 				location.reload();
 			}
+            else {
+                //alert('state=' + http.readyState + ', status=' + http.status);
+            }
 		}
 		http.send(params);
 		//var response = JSON.parse(xhttp.responseText);
@@ -388,6 +515,5 @@ function add_new_todo() {
 		alert("I didn't understand your entry. Please try again.");
 	}
 }
-
-countRows(0);
 </script>
+</html>

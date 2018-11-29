@@ -26,7 +26,7 @@ label {
 	color: white;
 	border: 0px solid;
 	background-color: transparent;
-	width: 62px;
+	width: 54px;
 }
 
 #overlay {
@@ -52,4 +52,11 @@ label {
 }
 .future-due.show {
 	display: table-row;
+}
+
+#lists_dropdown {
+    display: inline;
+}
+#add_list_button {
+    display: inline;
 }

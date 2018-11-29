@@ -9,7 +9,7 @@
       $name = mysqli_real_escape_string($db,$_POST['username']);
       $p = mysqli_real_escape_string($db,$_POST['password']); 
       
-      $sql = "SELECT id, state, tier FROM tudu_users WHERE name = '$name' AND p = sha1('$p')";
+      $sql = "SELECT u.id, u.state, u.tier, l.id as personal_list_id FROM tudu_users u, tudu_lists l, tudu_list_access la WHERE name = '$name' AND p = sha1('$p') AND l.id = la.list_id AND u.id = la.user_id AND l.title = 'personal'";
       $result = mysqli_query($db,$sql);
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
       $state = $row['state'];
@@ -22,6 +22,7 @@
          $_SESSION['login_user'] = $name;
          $_SESSION['login_user_id'] = $row['id'];
          $_SESSION['login_user_tier'] = $row['tier'];
+         $_SESSION['selected_list_id'] = $row['personal_list_id'];
          
          header("location: .");
       }else {
