@@ -2,8 +2,7 @@
 header('Access-Control-Allow-Methods: GET');
 header('Content-Type: application/json');
 
-include "session.php";
-include "config.php";
+include "../config.php";
 include "list.php";
 
 $list = new TodoList();

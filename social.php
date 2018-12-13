@@ -1,7 +1,3 @@
-<html>
-<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
-<meta charset="UTF-8">
-
 <?php
   include "session.php";
 
@@ -34,6 +30,9 @@
   
 ?>
 
+<html>
+<!-- meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1" -->
+<!-- meta charset="UTF-8" -->
 	<head>
 		<title>Social</title>
       
@@ -115,7 +114,7 @@
             xhr.onreadystatechange = function() {
                 if(xhr.readyState == 4 && xhr.status == 200) {
 
-                    alert('xhr text:'+xhr.responseText);
+                    alert('xhr text pldfs:'+xhr.responseText);
                     //alert('xhr type:'+xhr.responseType);
                     //alert('xhr json:'+xhr.responseJSON);
                     //alert('xhr xml:'+xhr.responseXML);

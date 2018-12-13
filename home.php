@@ -297,18 +297,23 @@ function selectList() {
 function getRowClassFromDueDate(due_date_string) {
 
     var due_date = Date.parse(due_date_string);
-
+    //alert('due date'+due_date);
+    
     var now = new Date();
+    //alert('now'+now);
     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    //alert('today'+today);
     var tomorrow = new Date();
     tomorrow.setDate(today.getDate()+1);
+    //alert('tomorrow'+tomorrow);
+    var tonight = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 0, 0, 0);
 
     row_class = "due-today";
 	
 	if(due_date < today) {
 		row_class = "past-due";
 	}
-	if(due_date >= tomorrow) {
+	if(due_date >= tonight) {
 		row_class = "future-due";
 	}
 
@@ -332,8 +337,6 @@ function closeEditDialog() {
 }
 
 function addNewList() {
-	$('#add-new-list').modal('hide');
-
 	var new_list = document.getElementById('new-list-title');
 	
 	if(new_list.value) {
@@ -349,6 +352,7 @@ function addNewList() {
 				//alert(http.responseText);
 				//location.reload();
                 $('#select_list').val(new_list.value);
+                $('#add-new-list').modal('hide');
 			}
 		}
 		http.send(params);
@@ -428,6 +432,7 @@ $(function() {
 });
 
 function markTodoCompleted() {
+    //alert("markTodoCompleted()");
 	
 	var completed_date_input = document.getElementById('completed-datepicker');
 
@@ -474,13 +479,13 @@ function updateTodoField(field, input_element, should_reload_page) {
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
 			//success
-			//alert('success ' + xhr.responseText);
+			//alert('success, response text: ' + xhr.responseText);
 			if(should_reload_page) {
 				location.reload();
 			}
 		}
 		else {
-			//alert(xhr.responseText);
+			//alert('state=' + xhr.readyState + ', status=' + xhr.status);
 		}
 	}
 	xhr.send(params);
