@@ -1,9 +1,9 @@
 <script>
 function showNewTodoRow() {
-	document.getElementById("new_todo_row").style.display = "";
-	//document.getElementById("new_todo_row_actions").style.display = "";
+	document.getElementById("new-todo-row").style.display = "";
+	//document.getElementById("new-todo-row-actions").style.display = "";
     //window.setTimeout(function () {
-        document.getElementById('new_todo').focus();
+        document.getElementById('new-todo').focus();
     //}, 0);
 }
 </script>

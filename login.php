@@ -11,6 +11,6 @@
 		  <a href="create_account.php">Create Account</a>
 	   </form>
 
-	   <div style = "font-size:11px; color:#cc0000; margin-top:10px"><?php echo $error; ?></div>
+	   <div style = "font-size:11px; color:#cc0000; margin-top:10px">Log in error. Please try again.</div>
 	</div>
  </div>

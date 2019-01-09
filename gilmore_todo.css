@@ -11,17 +11,14 @@ label {
 	border:#666666 solid 1px;
 }
 
-.todo_list_text {
-}
-
-.todo_text_td {
+.todo-text-td {
 	max-width: 100px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-.todo_list_due_date {
+.todo-list-due-date {
 	font-size: 10px;
 	color: white;
 	border: 0px solid;
@@ -54,9 +51,12 @@ label {
 	display: table-row;
 }
 
-#lists_dropdown {
+#lists-dropdown {
     display: inline;
 }
-#add_list_button {
+#add-list-button {
     display: inline;
+}
+#select-list {
+    border-radius: 20px;
 }

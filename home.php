@@ -29,22 +29,23 @@
 ?>
 
   <div class="table-responsive">
-  <table id="todo_main_table" class="table table-dark table-striped">
+  <table id="todo-main-table" class="table table-dark table-striped">
     <thead style="background-color: gray">
       <tr>
         <th>
 			<div style="display: inline">
 			todo<div id="num-todos" style="color: #bbbbbb; display: inline"></div>
-			</div>
+			</div><br>
 			<div id="view-options" style="margin-left: 20px; color: #aaaaaa; display: inline">
-				past<input id="view_past_check_box" onclick="viewPast(this)" type="checkbox"/>
+				pa<input id="view-past-check-box" onclick="viewPast(this)" type="checkbox"/>
 				&nbsp;
-				future<input id="view_future_check_box" onclick="viewFuture(this)" type="checkbox"/>
+				fu<input id="view-future-check-box" onclick="viewFuture(this)" type="checkbox"/>
 			</div>
 		</th>
         <th>
-            <div id="lists_dropdown">
-                <select id="select_list" onchange="javascript:selectList()">
+            <div id="lists-dropdown">
+                <select id="select-list" onchange="javascript:selectList()">
+                    <option value="all">View All Todos</option>
                     <?
                       while($accessible_list_row = mysqli_fetch_array($accessible_lists_result, MYSQLI_ASSOC)) {
                         echo "<option value=\"".$accessible_list_row['id']."\"";
@@ -68,19 +69,19 @@
     </thead>
     <tbody>
 		<!-- New todo text box row -->
-		<tr id="new_todo_row" class="new_todo_row" style="display: none">
+		<tr id="new-todo-row" class="new-todo-row" style="display: none">
 			<td colspan="2">
-				<input name="new_todo" id="new_todo" style="width: 100%"></input>
+				<input name="new-todo" id="new-todo" style="width: 100%"></input>
 			</td>
 			<td>
-				<input name="new_todo_due_date" type="text" id="datepicker" style="width: 100px" value="<?php echo date('m/d/Y'); ?>">
+				<input name="new-todo-due-date" type="text" id="datepicker" style="width: 100px" value="<?php echo date('m/d/Y'); ?>">
 				<a href="javascript:addNewTodo()"><i class="fa fa-plus-circle" style="padding-left: 20px;font-size:20px;color:red;"></i></a>
 			</td>
 		</tr>
 		
 		<!-- New todo button bar row -->
         <!--
-		<tr id="new_todo_row_actions" class="new_todo_row" style="display: none">
+		<tr id="new-todo-row-actions" class="new-todo-row" style="display: none">
 			<td colspan="3">
 			<input type="button" value="Save" onclick="javascript:addNewTodo()"/><input type="button" value="Edit Details"/><input type="button" value="Send to Help"/><input type="button" value="Send to Other User"/>
 			</td>
@@ -195,7 +196,7 @@ function countRows() {
 
 	var row_count = 0;
     var total_not_complete = 0;
-	var table = document.getElementById("todo_main_table");
+	var table = document.getElementById("todo-main-table");
     $('.past-due').each(function(i, obj) {
         if(count_past) row_count++;
 		total_not_complete++;
@@ -212,7 +213,7 @@ function countRows() {
     return total_not_complete;
 }
 
-document.getElementById("new_todo").addEventListener("keyup", function(event) {
+document.getElementById("new-todo").addEventListener("keyup", function(event) {
   // Cancel the default action, if needed
   event.preventDefault();
   // 13 is the enter key
@@ -227,18 +228,25 @@ function addList() {
 
 function selectList() {
 
-    if($('#select_list').val() == 0) {
+    if($('#select-list').val() == 0) {
         addList();
         return;
     }
     
-    $("#todo_main_table").find("tr:gt(1)").remove();
+    $('#todo-main-table').find('tr:gt(1)').remove();
 	
     var xhr = new XMLHttpRequest();
-    var params = "list_id=" + $('#select_list').val();
-    var url = 'read.php?' + params;
+    var params = '';
+    var url = '';
+    if($('#select-list').val() == 'all') {
+        url = 'read.php';
+    }
+    else {
+        params = 'list_id=' + $('#select-list').val();
+        url = 'read.php?' + params;
+    }
     //alert(url);
-	xhr.open("GET", url, true);
+	xhr.open('GET', url, true);
 
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
@@ -262,20 +270,20 @@ function selectList() {
                     out += arr[i].id + '.' + arr[i].text + '\n';
 
                     out += "<tr class=\"" + getRowClassFromDueDate(arr[i].due_date) + "\">";
-                    out += "<td id=\"" + arr[i].id + "\" colspan=2 class='todo_text_td' onclick='javascript:todoTouch(this);'>" + arr[i].text + "</td>";
+                    out += "<td id=\"" + arr[i].id + "\" colspan=2 class='todo-text-td' onclick='javascript:todoTouch(this);'>" + arr[i].text + "</td>";
                     out += "<td>"
                         + "<input type='text' id='datepicker" + i + "' value='" + formatDate(arr[i].due_date) + "' readonly"
-                        + " class='todo_list_due_date' onchange='javascript:todoDueDateTouch(this, " + arr[i].id + ")'/>"
+                        + " class='todo-list-due-date' onchange='javascript:todoDueDateTouch(this, " + arr[i].id + ")'/>"
                         + "</td>";
                     out += "</tr>";
                 }
             }
 
-            $('#todo_main_table > tbody:last-child').append(out);
+            $('#todo-main-table > tbody:last-child').append(out);
             
-            $('#view_past_check_box')[0].checked = false;
+            $('#view-past-check-box')[0].checked = false;
             count_past = false;
-            $('#view_future_check_box')[0].checked = false;
+            $('#view-future-check-box')[0].checked = false;
             count_future = false;
             
             var numTodos = countRows();
@@ -350,9 +358,10 @@ function addNewList() {
 			if(http.readyState == 4 && http.status == 200) {
 				//success
 				//alert(http.responseText);
-				//location.reload();
-                $('#select_list').val(new_list.value);
+                $('#select-list').val(new_list.value);
                 $('#add-new-list').modal('hide');
+				alert('hide add-new-list');
+				//location.reload();
 			}
 		}
 		http.send(params);
@@ -492,8 +501,8 @@ function updateTodoField(field, input_element, should_reload_page) {
 }
 
 function addNewTodo() {
-	var new_todo = document.getElementById('new_todo');
-	var new_todo_due_date = document.getElementsByName('new_todo_due_date')[0];
+	var new_todo = document.getElementById('new-todo');
+	var new_todo_due_date = document.getElementsByName('new-todo-due-date')[0];
 	
 	if(new_todo.value) {
 		var http = new XMLHttpRequest();
