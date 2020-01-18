@@ -12,6 +12,13 @@
   if(isset($_GET['selected_list_id'])) {
       $_SESSION['selected_list_id'] = $_GET['selected_list_id'];
   }
+
+  if(isset($_GET['d'])) {
+      $_SESSION['active_day'] = $_GET['d'];
+  }
+  else {
+      $_SESSION['active_day'] = '';
+  }
   
   $sql = sql_select_lists_for_user($user_id);
   $accessible_lists_result = mysqli_query($db,$sql);
@@ -43,6 +50,12 @@
 			</div>
 		</th>
         <th>
+            <div id="active-date-block">
+            <div id="go-to-yesterday" style="display:inline" onclick="moveToYesterday()"><</div>
+            <div id="active-date" style="display:inline"></div>
+            <div id="go-to-tomorrow" style="display:inline" onclick="moveToTomorrow()">></div>
+            </div>
+            
             <div id="lists-dropdown">
                 <select id="select-list" onchange="javascript:selectList()">
                     <?
@@ -163,6 +176,17 @@
 
 <script type="text/javascript" src="todo.js"></script>
 <script>
+// Active day defaults to today
+var now = new Date();
+var session_day = '<?php echo $_SESSION['active_day']; ?>';
+var active_day;
+if(session_day == '') {
+    active_day = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+}
+else {
+    active_day = new Date(session_day);
+}
+
 var count_past = false;
 var count_future = false;
 
@@ -189,6 +213,20 @@ function viewFuture(cb) {
 	}
 	
 	countRows();
+}
+
+function moveToYesterday() {
+    var yesterday = new Date();
+    yesterday.setDate(active_day.getDate()-1);
+    gotoDay(yesterday);
+}
+function moveToTomorrow() {
+    var tomorrow = new Date();
+    tomorrow.setDate(active_day.getDate()+1);
+    gotoDay(tomorrow);
+}
+function gotoDay(d) {
+	window.location.href = 'http://gilmore.cc/todo?d=' + d.getFullYear() + '-' + (1+d.getMonth()) + '-' + d.getDate() + ' 00:00:00';
 }
 
 function countRows() {
@@ -306,18 +344,14 @@ function getRowClassFromDueDate(due_date_string) {
     var due_date = Date.parse(due_date_string);
     //alert('due date'+due_date);
     
-    var now = new Date();
-    //alert('now'+now);
-    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-    //alert('today'+today);
     var tomorrow = new Date();
-    tomorrow.setDate(today.getDate()+1);
+    tomorrow.setDate(active_day.getDate()+1);
     //alert('tomorrow'+tomorrow);
     var tonight = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 0, 0, 0);
 
     row_class = "due-today";
 	
-	if(due_date < today) {
+	if(due_date < active_day) {
 		row_class = "past-due";
 	}
 	if(due_date >= tonight) {
@@ -435,6 +469,9 @@ $(function() {
 		changeYear: true
 	});
     
+    var active_date_div = document.getElementById("active-date");
+    active_date_div.innerHTML = (1+active_day.getMonth()) + '/' + active_day.getDate() + '/' + active_day.getFullYear();
+
     // Initial load of todo table
     selectList();
 });

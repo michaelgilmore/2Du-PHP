@@ -54,6 +54,9 @@ label {
 #lists-dropdown {
     display: inline;
 }
+#active-date-block {
+    margin: 0 50 0;
+}
 #add-list-button {
     display: inline;
 }

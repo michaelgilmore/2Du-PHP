@@ -28,6 +28,8 @@
   $row = $result->fetch_row();
   $done_count_for_user = $row[0];
   
+  $sql = "SELECT * FROM tudu_friends WHERE user_id = $user_id";
+  $friends_result = mysqli_query($db,$sql);
 ?>
 
 <html>
@@ -78,16 +80,48 @@
 
 			</div>
 			
-			<div style="margin-top: 100px;">
+            <hr>
+            
+			<div name="friend-div" style="margin-top: 100px;">
+				<b>Connected Friends:</b><br>
+                <table style="border-collapse:separate">
+                    <tr style="background-color:gray"><th>Friend</th><th>Todos done/total</th><th>Friends since</th><th>Last todo added</th></tr>
+                <?php
+                    while($friend_connection_row = mysqli_fetch_array($friends_result, MYSQLI_ASSOC)) {
+
+                        $sql = "SELECT name FROM tudu_users WHERE id = ".$friend_connection_row['friend_user_id'];
+                        $result = mysqli_query($db,$sql);
+                        $row = $result->fetch_row();
+                        $friend_name = $row[0];
+                        
+                        $friends_since = $friend_connection_row['created_date'];
+
+                        $sql = "SELECT count(id), max(created_date) as last_add_date FROM tudus WHERE user_id = ".$friend_connection_row['friend_user_id'];
+                        $result = mysqli_query($db,$sql);
+                        $row = $result->fetch_row();
+                        $todo_count_for_user = $row[0];
+                        $last_add_date = $row[1];
+
+                        $sql = "SELECT count(id) FROM tudus where completed_date is not null AND user_id = ".$friend_connection_row['friend_user_id'];
+                        $result = mysqli_query($db,$sql);
+                        $row = $result->fetch_row();
+                        $done_count_for_user = $row[0];
+
+                        echo "<tr><td><b>$friend_name</b></td><td>$done_count_for_user/$todo_count_for_user</td><td>$friends_since</td><td>$last_add_date</td></tr>";
+                  }
+                ?>
+                </table>
+                <br>
 				<b>Connect to Friend</b>
                 <input id="connect_to_username" placeholder="username"/>
                 <input value="Connect" type="button" onclick="connectFriends()"/>
-			</div>
-			<div style="margin-top: 100px;">
+                <br>
+                <!--
 				<b>Share list with Friend</b>
                 <select id="share_list_dropdown"></select>
                 <select id="share_with_user_dropdown"></select>
                 <input value="Share" type="button" onclick="shareList()"/>
+                -->
 			</div>
 
 		</div>
@@ -99,13 +133,14 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 
         <script>
+        /*
         $(function() {
 
             populateListDropdownForSharing();
             populateUserDropdownForSharing();
         
         });
-
+        
         function populateListDropdownForSharing() {
             var xhr = new XMLHttpRequest();
             var url = 'list/read.php';
@@ -164,32 +199,6 @@
             xhr.send();
         }
         
-        function connectFriends() {
-            var friend_username = $('#connect_to_username').val();
-            
-            var xhr = new XMLHttpRequest();
-            var params = 'friend_username=' + friend_username;
-            var url = 'friend/create.php';
-            //alert(url);
-            xhr.open("POST", url, true);
-
-            xhr.onreadystatechange = function() {
-                if(xhr.readyState == 4 && xhr.status == 200) {
-
-                    //alert('xhr text:'+xhr.responseText);
-                    //alert('xhr type:'+xhr.responseType);
-                    //alert('xhr json:'+xhr.responseJSON);
-                    //alert('xhr xml:'+xhr.responseXML);
-                    alert('You are now connected to ' + friend_username);
-                }
-                else {
-                    //we come here for state 2 and 3 before we get 4
-                    //alert('state:' + xhr.readyState + ', status:' + xhr.status);
-                }
-            }
-            xhr.send(params);
-        }
-        
         function shareList() {
             var share_list_id = $('#share_list_dropdown').val();
             var share_with_user_id = $('#share_with_user_dropdown').val();
@@ -209,6 +218,33 @@
                     //alert('xhr xml:'+xhr.responseXML);
                     //alert('You have shared ' + share_list + ' with ' + share_with_user);
                     alert('Your list has been shared');
+                }
+                else {
+                    //we come here for state 2 and 3 before we get 4
+                    //alert('state:' + xhr.readyState + ', status:' + xhr.status);
+                }
+            }
+            xhr.send(params);
+        }
+        */
+        
+        function connectFriends() {
+            var friend_username = $('#connect_to_username').val();
+            
+            var xhr = new XMLHttpRequest();
+            var params = 'friend_username=' + friend_username;
+            var url = 'friend/create.php';
+            //alert(url);
+            xhr.open("POST", url, true);
+
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState == 4 && xhr.status == 200) {
+
+                    //alert('xhr text:'+xhr.responseText);
+                    //alert('xhr type:'+xhr.responseType);
+                    //alert('xhr json:'+xhr.responseJSON);
+                    //alert('xhr xml:'+xhr.responseXML);
+                    alert('You are now connected to ' + friend_username);
                 }
                 else {
                     //we come here for state 2 and 3 before we get 4
