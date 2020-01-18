@@ -177,6 +177,16 @@ switch ($method) {
         server_log("POST/UPDATE:$sql");
         //echo "$sql\n";
         $result = mysqli_query($db, $sql);
+        
+        if('' != $due) {
+            // Record all due date changes in a separate file for determining how many times
+            // it has been moved
+            $sqlTrackDueDateChange = "insert into tudu_moved (tudu_id, new_due_date) ".
+               "values ($key, '$tuduDue')";
+            $result = mysqli_query($db, $sqlTrackDueDateChange);
+            server_log("SQL query ($sqlTrackDueDateChange) failed ($result)");
+            server_log(mysqli_error($db));
+        }
 	}
     break;
 }

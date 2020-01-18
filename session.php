@@ -2,6 +2,7 @@
    include('config.php');
 
    session_save_path("tmp");
+   session_id($_GET['sid']);
    session_start();
    
    $user_check = $_SESSION['login_user'];

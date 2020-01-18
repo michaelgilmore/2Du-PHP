@@ -25,7 +25,7 @@ elseif(isset($_GET['list_id'])) {
     $sql = $todo->readListQuery($_GET['list_id']);
 }
 else {
-    //array_push($return_array, 'all');
+    $_SESSION['selected_list_id'] = 0;
     $sql = $todo->readAllActiveQuery();
 }
 

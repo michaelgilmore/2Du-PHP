@@ -2,6 +2,7 @@
    include("config.php");
    
    session_save_path("tmp");
+   session_id($_GET['sid']);
    session_start();
    
    if($_SERVER["REQUEST_METHOD"] == "POST") {

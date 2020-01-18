@@ -45,16 +45,15 @@
         <th>
             <div id="lists-dropdown">
                 <select id="select-list" onchange="javascript:selectList()">
-                    <option value="all">View All Todos</option>
                     <?
+                      echo "<option value=\"all\"";
+                      if($_SESSION['selected_list_id'] == 0) {
+                        echo " selected";
+                      }
+                      echo ">View All Todos</option>";  
                       while($accessible_list_row = mysqli_fetch_array($accessible_lists_result, MYSQLI_ASSOC)) {
                         echo "<option value=\"".$accessible_list_row['id']."\"";
-                        if($_SESSION['selected_list_id'] == 0) {
-                            if('personal' == $accessible_list_row['title']) {
-                                echo " selected";
-                            }
-                        }
-                        elseif($accessible_list_row['id'] == $_SESSION['selected_list_id']) {
+                        if($accessible_list_row['id'] == $_SESSION['selected_list_id']) {
                             echo " selected";
                         }
                         echo ">".$accessible_list_row['title']."</option>";  
