@@ -158,5 +158,9 @@ d3.csv("bar-data<?php echo $user_id; ?>.csv", function(error, data) {
 		<!-- Latest compiled JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 
+<?php
+  include "footer.php";
+?>
+
 	</body>
 </html>

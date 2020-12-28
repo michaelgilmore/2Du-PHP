@@ -233,8 +233,8 @@
             
             var xhr = new XMLHttpRequest();
             var params = 'friend_username=' + friend_username;
-            var url = 'friend/create.php';
-            //alert(url);
+            var url = 'friend/create_friend_request.php';
+            alert(url);
             xhr.open("POST", url, true);
 
             xhr.onreadystatechange = function() {
@@ -244,7 +244,7 @@
                     //alert('xhr type:'+xhr.responseType);
                     //alert('xhr json:'+xhr.responseJSON);
                     //alert('xhr xml:'+xhr.responseXML);
-                    alert('You are now connected to ' + friend_username);
+                    alert('Your friend request has been sent to ' + friend_username);
                 }
                 else {
                     //we come here for state 2 and 3 before we get 4
@@ -254,5 +254,9 @@
             xhr.send(params);
         }
         </script>
+<?php
+  include "footer.php";
+?>
+
 	</body>
 </html>

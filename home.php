@@ -58,7 +58,7 @@
             
             <div id="lists-dropdown">
                 <select id="select-list" onchange="javascript:selectList()">
-                    <?
+                    <?php
                       echo "<option value=\"all\"";
                       if($_SESSION['selected_list_id'] == 0) {
                         echo " selected";
@@ -566,4 +566,9 @@ function addNewTodo() {
 	}
 }
 </script>
+
+<?php
+  include "footer.php";
+?>
+
 </html>
