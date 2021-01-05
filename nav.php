@@ -12,21 +12,21 @@ function showNewTodoRow() {
 <div class="row" style="padding: 12">
   <div class="col">
 	<a href=".">
-	  <i class="fa fa-home" style="font-size:10vw;color:blue;"></i>
+	  <i class="fa fa-home" style="font-size:10vw;color:green;"></i>
 	</a>
   </div>
   <div class="col">
-	<a href="account.php">
+	<a href="http://gilmore.cc/todo/account.php">
 	  <i class="fa fa-user" style="font-size:10vw;color:blue;"></i>
 	</a>
   </div>
   <div class="col">
-	<a href="social.php">
+	<a href="http://gilmore.cc/todo/social.php">
 	  <i class="fa fa-group" style="font-size:10vw;color:blue;"></i>
 	</a>
   </div>
   <div class="col">
-	<a href="stats.php">
+	<a href="http://gilmore.cc/todo/stats.php">
 	  <i class="fa fa-bar-chart" style="font-size:10vw;color:blue;"></i>
 	</a>
   </div>

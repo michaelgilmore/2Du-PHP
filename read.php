@@ -1,8 +1,10 @@
 <?php
+session_start();
+
 header('Access-Control-Allow-Methods: GET');
 header('Content-Type: application/json');
 
-include "session.php";
+//include "session.php";
 include "config.php";
 include "todo.php";
 
@@ -48,7 +50,7 @@ if($num_todos > 0) {
     echo json_encode($return_array);
 }
 else {
-    echo json_encode(array('message' => 'No todos'));
+    echo json_encode(array('message' => 'No todos', 'sql' => $sql));
 }
 
 ?>

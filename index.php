@@ -1,9 +1,9 @@
 <?php
-	include("config.php");
-   
+	session_start();
 	session_save_path("tmp");
 	session_id($_GET['sid']);
-	session_start();
+   
+	include("config.php");
    
 	function maskEmail($e) {
 		return substr($e, 0, 1) . '..@..' . substr($e, strlen($e)-1);
@@ -13,8 +13,6 @@
 	   
 	  if (isset($_POST['submit']) && 'Forgot Password' == $_POST['submit'] && isset($_POST['username'])) {
 		  
-		  echo '<!-- forgot password -->';
-
 		  $username = $_POST['username'];
 		  $sql = "SELECT email FROM tudu_users WHERE name = '$username'";
 		  $result = mysqli_query($db,$sql);
@@ -30,6 +28,7 @@
  			$message = "We do not have an email address on file for you. Password reset and emailed to Todo admin at todo@gilmore.cc. Email this address to get your new password.";
 		  }
 		  
+		  if (strlen(trim($username)) > 0) {
 			$tempPwd = 'changeme'.rand(1,100);
 			mysqli_query($db, "UPDATE tudu_users set p=sha1('".$tempPwd."') WHERE name='".$_POST['username']."'");
 			
@@ -41,12 +40,9 @@
 				'X-Mailer: PHP/' . phpversion();
 
 			mail($to, $subject, $body, $headers);
-			
-			echo '<!-- mailed new password -->';
+		  }
 	  }
 	  elseif (isset($_POST['username']) && isset($_POST['password'])) {
-
-		echo '<!-- logging in with' . $_POST['username'] . ' -->';
 
 		  $name = mysqli_real_escape_string($db,$_POST['username']);
 		  $p = mysqli_real_escape_string($db,$_POST['password']); 

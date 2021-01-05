@@ -1,10 +1,10 @@
+<?php
+  session_start();
+?>
 <!-- TODO: Remove all reload calls -->
-<html>
-<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
-<meta charset="UTF-8">
 
 <?php
-  include "session.php";
+  //include "session.php";
   include "db_queries.php";
 
   $user_id = $_SESSION['login_user_id'];
@@ -26,7 +26,7 @@
 
 <!--
 <h1>Welcome <?php echo $_SESSION['login_user']; ?></h1>
-<h3><a href = "logout.php">Sign Out</a></h2>
+<h3><a href = "">Sign Out</a></h2>
 -->
 
 <div class="container">
@@ -272,6 +272,7 @@ function selectList() {
     
     $('#todo-main-table').find('tr:gt(1)').remove();
 	
+
     var xhr = new XMLHttpRequest();
     var params = '';
     var url = '';
@@ -570,5 +571,3 @@ function addNewTodo() {
 <?php
   include "footer.php";
 ?>
-
-</html>

@@ -30,6 +30,9 @@
   
   $sql = "SELECT * FROM tudu_friends WHERE user_id = $user_id";
   $friends_result = mysqli_query($db,$sql);
+
+  $sql = "SELECT u.name as new_friend_name, u.id as new_friend_id FROM tudu_friend_requests, tudu_users u WHERE requester_id = u.id AND requested_friend_id = $user_id";
+  $friend_requests = mysqli_query($db,$sql);
 ?>
 
 <html>
@@ -83,6 +86,22 @@
             <hr>
             
 			<div name="friend-div" style="margin-top: 100px;">
+				<b>Connection Requests:</b><br>
+                <table style="border-collapse:separate">
+                <?php
+                    while($friend_connection_row = mysqli_fetch_array($friend_requests, MYSQLI_ASSOC)) {
+
+                        $new_friend_name = $friend_connection_row['new_friend_name'];
+                        $new_friend_id = $friend_connection_row['new_friend_id'];
+
+                        echo "<tr><td>$new_friend_name</td><td>";
+						echo "<input type='button' value='Accept' onclick='acceptFriend(1, $new_friend_id);'/>";
+						echo "<input type='button' value='Decline' onclick='acceptFriend(0, $new_friend_id);'/>";
+						echo "</td></tr>";
+                  }
+                ?>
+                </table>
+                <br>
 				<b>Connected Friends:</b><br>
                 <table style="border-collapse:separate">
                     <tr style="background-color:gray"><th>Friend</th><th>Todos done/total</th><th>Friends since</th><th>Last todo added</th></tr>
@@ -133,6 +152,38 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 
         <script>
+		function acceptFriend(accept, new_friend_id) {
+            var xhr = new XMLHttpRequest();
+            var url = 'friend/accept_friend.php';
+            var params = 'accepter_id=' + <?php echo $user_id; ?> + '&new_friend_id=' + new_friend_id + '&accept=' + accept;
+            xhr.open("POST", url, true);
+			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState == 4 && xhr.status == 200) {
+
+					if (accept) {
+						alert('Accepted');
+					}
+					else {
+						alert('Declined');
+					}
+					
+                    //alert('xhr text:'+xhr.responseText);
+                    //alert('xhr type:'+xhr.responseType);
+                    //alert('xhr json:'+xhr.responseJSON);
+                    //alert('xhr xml:'+xhr.responseXML);
+					
+					location.reload();
+                }
+                else {
+                    //we come here for state 2 and 3 before we get 4
+                    //alert('state:' + xhr.readyState + ', status:' + xhr.status);
+                }
+            }
+            xhr.send(params);
+		}
+		
         /*
         $(function() {
 
@@ -234,8 +285,9 @@
             var xhr = new XMLHttpRequest();
             var params = 'friend_username=' + friend_username;
             var url = 'friend/create_friend_request.php';
-            alert(url);
+            //alert(url);
             xhr.open("POST", url, true);
+			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
             xhr.onreadystatechange = function() {
                 if(xhr.readyState == 4 && xhr.status == 200) {

@@ -1,5 +1,7 @@
 <?php
-  include "session.php";
+  session_start();
+  
+  include "config.php";
 
   $user_id = $_SESSION['login_user_id'];
 
@@ -11,7 +13,7 @@
   $sql = "SELECT id, text, completed_date FROM tudus WHERE user_id = '$user_id' and completed_date is not null ORDER BY completed_date desc LIMIT 0, 1000";
   $result = mysqli_query($db,$sql);
   $num_todos = mysqli_num_rows($result);
-
+  
   if (count($_POST) > 0) {
 	  if (isset($_POST['newEmail'])) {
 		mysqli_query($db, "UPDATE tudu_users set email='" . $_POST["newEmail"] . "' WHERE id='" . $_SESSION["login_user_id"] . "'");
